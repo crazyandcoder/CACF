@@ -1,0 +1,6 @@
+rootProject.name='CrazyAndroidPack'
+include ':app'
+include ':lib-base'
+include ':lib-common'
+include ':lib-network'
+include ':module-main'
