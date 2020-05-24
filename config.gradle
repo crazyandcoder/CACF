@@ -34,13 +34,21 @@ ext {
     dependencies = [
             "loadsir"                      : "com.kingja.loadsir:loadsir:1.3.6",
             "gson"                         : "com.google.code.gson:gson:2.8.6",
-            "rxjava2"                      : "io.reactivex.rxjava2:rxjava:2.2.10",
             "mmkv"                         : "com.tencent:mmkv:1.0.23",
             "BaseRecyclerViewAdapterHelper": "com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.0-beta11",
             "glide"                        : "com.github.bumptech.glide:glide:4.9.0",
             "glide-compiler"               : "com.github.bumptech.glide:compiler:4.9.0",
             "arouter-api"                  : "com.alibaba:arouter-api:1.5.0",
             "arouter-compiler"             : "com.alibaba:arouter-compiler:1.2.2",
+            "rxjava2"                      : "io.reactivex.rxjava2:rxjava:2.2.10",
+            "logging-interceptor"          : "com.squareup.okhttp3:logging-interceptor:3.12.2",
+            "okhttp3"                      : "com.squareup.okhttp3:okhttp:3.12.2",
+            "disklrucache"                 : "com.jakewharton:disklrucache:2.0.2",
+            "rxandroid"                    : "io.reactivex.rxjava2:rxandroid:2.1.1",
+            "retrofit2"                    : "com.squareup.retrofit2:retrofit:2.5.0",
+            "retrofit-converter-gson"      : "com.squareup.retrofit2:converter-gson:2.5.0",
+            "retrofit-adapter-rxjava2"     : "com.squareup.retrofit2:adapter-rxjava2:2.5.0",
+
     ]
 
 }
