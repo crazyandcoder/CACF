@@ -22,7 +22,7 @@ public enum CacheMode {
     /**
      * 完全按照HTTP协议的默认缓存规则，走OKhttp的Cache缓存
      */
-    DEFALUT("NoStrategy"),
+    DEFAULT("NoStrategy"),
 
     /**
      * 先请求网络，请求网络失败后再加载缓存

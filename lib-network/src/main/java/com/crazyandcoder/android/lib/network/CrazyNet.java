@@ -6,22 +6,35 @@ import android.text.TextUtils;
 
 import com.crazyandcoder.android.lib.network.cache.CacheConfig;
 import com.crazyandcoder.android.lib.network.cache.RxCache;
+import com.crazyandcoder.android.lib.network.cache.converter.IDiskConverter;
 import com.crazyandcoder.android.lib.network.cache.model.CacheMode;
 import com.crazyandcoder.android.lib.network.common.DefaultHostNameVerifier;
-import com.crazyandcoder.android.lib.network.cookie.CookieManager;
+import com.crazyandcoder.android.lib.network.cookie.CookieManger;
 import com.crazyandcoder.android.lib.network.interceptor.HttpLoggingInterceptor;
 import com.crazyandcoder.android.lib.network.model.HttpHeaders;
 import com.crazyandcoder.android.lib.network.model.HttpParams;
 import com.crazyandcoder.android.lib.network.utils.HttpLog;
 import com.crazyandcoder.android.lib.network.utils.HttpsUtils;
+import com.crazyandcoder.android.lib.network.utils.RxUtil;
+import com.crazyandcoder.android.lib.network.utils.Utils;
 
 import java.io.File;
 import java.io.InputStream;
+import java.net.Proxy;
+import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HostnameVerifier;
 
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import okhttp3.Cache;
+import okhttp3.ConnectionPool;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import retrofit2.CallAdapter;
+import retrofit2.Converter;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
@@ -97,7 +110,12 @@ public final class CrazyNet {
     /**
      * Cookie管理
      */
-    private CookieManager cookieJar;
+    private CookieManger cookieJar;
+
+    /**
+     * 全局BaseUrl
+     */
+    private String mBaseUrl;
 
     private volatile static CrazyNet singleInstance = null;
 
@@ -159,6 +177,10 @@ public final class CrazyNet {
     public static Context getContext() {
         checkInitialize();
         return sApplication;
+    }
+
+    public CacheConfig getCacheConfig() {
+        return mCacheConfig;
     }
 
     /**
@@ -285,7 +307,7 @@ public final class CrazyNet {
      * @param cookieStore
      * @return
      */
-    public CrazyNet setCookieStore(CookieManager cookieStore) {
+    public CrazyNet setCookieStore(CookieManger cookieStore) {
         cookieJar = cookieStore;
         mOkHttpClientBuilder.cookieJar(cookieJar);
         return this;
@@ -296,7 +318,7 @@ public final class CrazyNet {
      *
      * @return
      */
-    public static CookieManager getCookieJar() {
+    public static CookieManger getCookieJar() {
         return getInstance().cookieJar;
     }
 
@@ -390,6 +412,7 @@ public final class CrazyNet {
      */
     public static int getRetryIncreaseDelay() {
         return getInstance().mRetryIncreaseDelay;
+
     }
 
     /**
@@ -465,7 +488,7 @@ public final class CrazyNet {
      * 全局设置缓存的路径，默认是应用包下面的缓存
      */
     public CrazyNet setCacheDirectory(File directory) {
-        mCacheDirectory = Utils.checkNotNull(directory, "directory == null");
+        mCacheConfig.setCacheDirectory(Utils.checkNotNull(directory, "directory == null"));
         mRxCacheBuilder.diskDir(directory);
         return this;
     }
@@ -476,5 +499,205 @@ public final class CrazyNet {
     public static File getCacheDirectory() {
         return getInstance().mCacheConfig.getCacheDirectory();
     }
+
+    /**
+     * 全局设置缓存的转换器
+     */
+    public CrazyNet setCacheDiskConverter(IDiskConverter converter) {
+        mRxCacheBuilder.diskConverter(Utils.checkNotNull(converter, "converter == null"));
+        return this;
+    }
+
+    /**
+     * 全局设置OkHttp的缓存,默认是3天
+     */
+    public CrazyNet setHttpCache(Cache cache) {
+        mCacheConfig.setCache(cache);
+        return this;
+    }
+
+    /**
+     * 获取OkHttp的缓存<br>
+     */
+    public static Cache getHttpCache() {
+        return getInstance().mCacheConfig.getCache();
+    }
+
+    /**
+     * 添加全局公共请求参数
+     */
+    public CrazyNet addCommonParams(HttpParams commonParams) {
+        if (mCommonParams == null) {
+            mCommonParams = new HttpParams();
+        }
+        mCommonParams.put(commonParams);
+        return this;
+    }
+
+    /**
+     * 获取全局公共请求参数
+     */
+    public HttpParams getCommonParams() {
+        return mCommonParams;
+    }
+
+    /**
+     * 获取全局公共请求头
+     */
+    public HttpHeaders getCommonHeaders() {
+        return mCommonHeaders;
+    }
+
+    /**
+     * 添加全局公共请求参数
+     */
+    public CrazyNet addCommonHeaders(HttpHeaders commonHeaders) {
+        if (mCommonHeaders == null) {
+            mCommonHeaders = new HttpHeaders();
+        }
+        mCommonHeaders.put(commonHeaders);
+        return this;
+    }
+
+    /**
+     * 添加全局拦截器
+     */
+    public CrazyNet addInterceptor(Interceptor interceptor) {
+        mOkHttpClientBuilder.addInterceptor(Utils.checkNotNull(interceptor, "interceptor == null"));
+        return this;
+    }
+
+    /**
+     * 添加全局网络拦截器
+     */
+    public CrazyNet addNetworkInterceptor(Interceptor interceptor) {
+        mOkHttpClientBuilder.addNetworkInterceptor(Utils.checkNotNull(interceptor, "interceptor == null"));
+        return this;
+    }
+
+    /**
+     * 全局设置代理
+     */
+    public CrazyNet setOkproxy(Proxy proxy) {
+        mOkHttpClientBuilder.proxy(Utils.checkNotNull(proxy, "proxy == null"));
+        return this;
+    }
+
+    /**
+     * 全局设置请求的连接池
+     */
+    public CrazyNet setOkconnectionPool(ConnectionPool connectionPool) {
+        mOkHttpClientBuilder.connectionPool(Utils.checkNotNull(connectionPool, "connectionPool == null"));
+        return this;
+    }
+
+    /**
+     * 全局为Retrofit设置自定义的OkHttpClient
+     */
+    public CrazyNet setOkclient(OkHttpClient client) {
+        mRetrofitBuilder.client(Utils.checkNotNull(client, "client == null"));
+        return this;
+    }
+
+    /**
+     * 全局设置Converter.Factory,默认GsonConverterFactory.create()
+     */
+    public CrazyNet addConverterFactory(Converter.Factory factory) {
+        mRetrofitBuilder.addConverterFactory(Utils.checkNotNull(factory, "factory == null"));
+        return this;
+    }
+
+    /**
+     * 全局设置CallAdapter.Factory,默认RxJavaCallAdapterFactory.create()
+     */
+    public CrazyNet addCallAdapterFactory(CallAdapter.Factory factory) {
+        mRetrofitBuilder.addCallAdapterFactory(Utils.checkNotNull(factory, "factory == null"));
+        return this;
+    }
+
+    /**
+     * 全局设置Retrofit callbackExecutor
+     */
+    public CrazyNet setCallbackExecutor(Executor executor) {
+        mRetrofitBuilder.callbackExecutor(Utils.checkNotNull(executor, "executor == null"));
+        return this;
+    }
+
+    /**
+     * 全局设置Retrofit对象Factory
+     */
+    public CrazyNet setCallFactory(okhttp3.Call.Factory factory) {
+        mRetrofitBuilder.callFactory(Utils.checkNotNull(factory, "factory == null"));
+        return this;
+    }
+
+    /**
+     * 全局设置baseurl
+     */
+    public CrazyNet setBaseUrl(String baseUrl) {
+        mBaseUrl = Utils.checkNotNull(baseUrl, "baseUrl == null");
+        return this;
+    }
+
+    /**
+     * 获取全局baseurl
+     */
+    public static String getBaseUrl() {
+        return getInstance().mBaseUrl;
+    }
+
+    /**
+     * get请求
+     */
+//    public static GetRequest get(String url) {
+//        return new GetRequest(url);
+//    }
+
+
+    /**
+     * 取消订阅
+     */
+    public static void cancelSubscription(Disposable disposable) {
+        if (disposable != null && !disposable.isDisposed()) {
+            disposable.dispose();
+        }
+    }
+
+
+    /**
+     * 清空缓存
+     */
+    public static void clearCache() {
+        getRxCache().clear().compose(RxUtil.<Boolean>io_main())
+                .subscribe(new Consumer<Boolean>() {
+                    @Override
+                    public void accept(@NonNull Boolean aBoolean) throws Exception {
+                        HttpLog.i("clearCache success!!!");
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(@NonNull Throwable throwable) throws Exception {
+                        HttpLog.i("clearCache err!!!");
+                    }
+                });
+    }
+
+    /**
+     * 移除缓存（key）
+     */
+    public static void removeCache(String key) {
+        getRxCache().remove(key).compose(RxUtil.<Boolean>io_main()).subscribe(new Consumer<Boolean>() {
+            @Override
+            public void accept(@NonNull Boolean aBoolean) throws Exception {
+                HttpLog.i("removeCache success!!!");
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(@NonNull Throwable throwable) throws Exception {
+                HttpLog.i("removeCache err!!!");
+            }
+        });
+    }
+
 
 }
