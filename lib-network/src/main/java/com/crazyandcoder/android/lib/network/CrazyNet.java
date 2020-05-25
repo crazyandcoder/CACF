@@ -1,14 +1,20 @@
 package com.crazyandcoder.android.lib.network;
 
 import android.app.Application;
+import android.content.Context;
+import android.text.TextUtils;
 
 import com.crazyandcoder.android.lib.network.cache.CacheConfig;
 import com.crazyandcoder.android.lib.network.cache.RxCache;
 import com.crazyandcoder.android.lib.network.common.DefaultHostNameVerifier;
+import com.crazyandcoder.android.lib.network.interceptor.HttpLoggingInterceptor;
 import com.crazyandcoder.android.lib.network.model.HttpHeaders;
 import com.crazyandcoder.android.lib.network.model.HttpParams;
+import com.crazyandcoder.android.lib.network.utils.HttpLog;
 
 import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.HostnameVerifier;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -85,7 +91,7 @@ public final class CrazyNet {
     private volatile static CrazyNet singleInstance = null;
 
     private CrazyNet() {
-
+        mCacheConfig = new CacheConfig();
         mOkHttpClientBuilder = new OkHttpClient.Builder();
         mOkHttpClientBuilder.hostnameVerifier(new DefaultHostNameVerifier());
         mOkHttpClientBuilder.connectTimeout(DEFAULT_TIME_MILLISECONDS, TimeUnit.MILLISECONDS);
@@ -114,4 +120,127 @@ public final class CrazyNet {
         }
         return singleInstance;
     }
+
+
+    /**
+     * 初始化需要调用该方法
+     *
+     * @param application
+     */
+    public static void init(Application application) {
+        sApplication = application;
+    }
+
+    /**
+     * 检查是否以及初始化即，调用init方法
+     */
+    private static void checkInitialize() {
+        if (sApplication == null) {
+            throw new ExceptionInInitializerError("请先在全局Application中调用 CrazyNet.init() 初始化！");
+        }
+    }
+
+    /**
+     * 返回全局的Application
+     *
+     * @return
+     */
+    public static Context getContext() {
+        checkInitialize();
+        return sApplication;
+    }
+
+    /**
+     * 返回OkHttpClient
+     *
+     * @return
+     */
+    public static OkHttpClient getOkHttpClient() {
+        return getInstance().mOkHttpClientBuilder.build();
+    }
+
+    /**
+     * 对外暴露 OkHttpClient,方便自定义
+     *
+     * @return
+     */
+    public static OkHttpClient.Builder getOkHttpClentBuilder() {
+        return getInstance().mOkHttpClientBuilder;
+    }
+
+
+    /**
+     * 返回 Retrofit
+     *
+     * @return
+     */
+    public static Retrofit getRetrofit() {
+        return getInstance().mRetrofitBuilder.build();
+    }
+
+    /**
+     * 对外暴露 Retrofit,方便自定义
+     *
+     * @return
+     */
+    public static Retrofit.Builder getRetrofitBuilder() {
+        return getInstance().mRetrofitBuilder;
+    }
+
+
+    public static RxCache getRxCache() {
+        return getInstance().mRxCacheBuilder.build();
+    }
+
+    /**
+     * 对外暴露 RxCache,方便自定义
+     *
+     * @return
+     */
+    public static RxCache.Builder getRxCacheBuilder() {
+        return getInstance().mRxCacheBuilder;
+    }
+
+    /**
+     * @param tag
+     * @return
+     */
+    public CrazyNet debug(String tag) {
+        debug(tag, true);
+        return this;
+    }
+
+    /**
+     * @param tag
+     * @param isPrintException
+     * @return
+     */
+    public CrazyNet debug(String tag, boolean isPrintException) {
+        String tempTag = TextUtils.isEmpty(tag) ? "CrazyNet_" : tag;
+        if (isPrintException) {
+            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(tempTag, isPrintException);
+            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            mOkHttpClientBuilder.addInterceptor(loggingInterceptor);
+        }
+        HttpLog.customTagPrefix = tempTag;
+        HttpLog.allowE = isPrintException;
+        HttpLog.allowD = isPrintException;
+        HttpLog.allowI = isPrintException;
+        HttpLog.allowV = isPrintException;
+        return this;
+    }
+
+
+    /**
+     * https的全局访问规则
+     *
+     * @param hostNameVerifier
+     * @return
+     */
+    public CrazyNet setHostnameVerifier(HostnameVerifier hostNameVerifier) {
+        mOkHttpClientBuilder.hostnameVerifier(hostNameVerifier);
+        return this;
+    }
+
+
 }

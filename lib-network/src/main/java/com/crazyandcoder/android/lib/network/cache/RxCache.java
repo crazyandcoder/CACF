@@ -13,8 +13,14 @@ package com.crazyandcoder.android.lib.network.cache;
  */
 public final class RxCache {
 
+    private RxCache(Builder builder) {
+    }
 
     public static final class Builder {
 
+
+        public RxCache build() {
+            return new RxCache(this);
+        }
     }
 }
