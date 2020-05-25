@@ -6,12 +6,17 @@ import android.text.TextUtils;
 
 import com.crazyandcoder.android.lib.network.cache.CacheConfig;
 import com.crazyandcoder.android.lib.network.cache.RxCache;
+import com.crazyandcoder.android.lib.network.cache.model.CacheMode;
 import com.crazyandcoder.android.lib.network.common.DefaultHostNameVerifier;
+import com.crazyandcoder.android.lib.network.cookie.CookieManager;
 import com.crazyandcoder.android.lib.network.interceptor.HttpLoggingInterceptor;
 import com.crazyandcoder.android.lib.network.model.HttpHeaders;
 import com.crazyandcoder.android.lib.network.model.HttpParams;
 import com.crazyandcoder.android.lib.network.utils.HttpLog;
+import com.crazyandcoder.android.lib.network.utils.HttpsUtils;
 
+import java.io.File;
+import java.io.InputStream;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HostnameVerifier;
@@ -20,6 +25,7 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
+import static com.crazyandcoder.android.lib.network.cache.constant.Const.DEFAULT_CACHE_NEVER_EXPIRE;
 import static com.crazyandcoder.android.lib.network.cache.constant.Const.DEFAULT_RETRY_COUNT;
 import static com.crazyandcoder.android.lib.network.cache.constant.Const.DEFAULT_RETRY_DELAY;
 import static com.crazyandcoder.android.lib.network.cache.constant.Const.DEFAULT_RETRY_INCREASEDELAY;
@@ -87,6 +93,11 @@ public final class CrazyNet {
      * RxCache请求的builder
      */
     private RxCache.Builder mRxCacheBuilder;
+
+    /**
+     * Cookie管理
+     */
+    private CookieManager cookieJar;
 
     private volatile static CrazyNet singleInstance = null;
 
@@ -242,5 +253,228 @@ public final class CrazyNet {
         return this;
     }
 
+    /**
+     * https的全局自签名证书
+     *
+     * @param certificates
+     * @return
+     */
+    public CrazyNet setCertificates(InputStream... certificates) {
+        HttpsUtils.SSLParams sslParams = HttpsUtils.getSslSocketFactory(null, null, certificates);
+        mOkHttpClientBuilder.sslSocketFactory(sslParams.sslSocketFactory, sslParams.trustManager);
+        return this;
+    }
+
+    /**
+     * https双向认证证书
+     *
+     * @param bksFile
+     * @param password
+     * @param certificates
+     * @return
+     */
+    public CrazyNet setCertificates(InputStream bksFile, String password, InputStream... certificates) {
+        HttpsUtils.SSLParams sslParams = HttpsUtils.getSslSocketFactory(bksFile, password, certificates);
+        mOkHttpClientBuilder.sslSocketFactory(sslParams.sslSocketFactory, sslParams.trustManager);
+        return this;
+    }
+
+    /**
+     * 全局cookie存取规则
+     *
+     * @param cookieStore
+     * @return
+     */
+    public CrazyNet setCookieStore(CookieManager cookieStore) {
+        cookieJar = cookieStore;
+        mOkHttpClientBuilder.cookieJar(cookieJar);
+        return this;
+    }
+
+    /**
+     * 获取全局的cookie实例
+     *
+     * @return
+     */
+    public static CookieManager getCookieJar() {
+        return getInstance().cookieJar;
+    }
+
+    /**
+     * 全局读取超时时间
+     *
+     * @param readTimeOut
+     * @return
+     */
+    public CrazyNet setReadTimeOut(long readTimeOut) {
+        mOkHttpClientBuilder.readTimeout(readTimeOut, TimeUnit.SECONDS);
+        return this;
+    }
+
+    /**
+     * 全局写入超时时间
+     *
+     * @param readTimeOut
+     * @return
+     */
+    public CrazyNet setWriteTimeOut(long readTimeOut) {
+        mOkHttpClientBuilder.writeTimeout(readTimeOut, TimeUnit.SECONDS);
+        return this;
+    }
+
+    /**
+     * 全局连接超时时间
+     *
+     * @param readTimeOut
+     * @return
+     */
+    public CrazyNet setConnectTimeOut(long readTimeOut) {
+        mOkHttpClientBuilder.connectTimeout(readTimeOut, TimeUnit.SECONDS);
+        return this;
+    }
+
+    /**
+     * 超时重试次数
+     *
+     * @param retryCount
+     * @return
+     */
+    public CrazyNet setRetryCount(int retryCount) {
+        if (retryCount < 0) {
+            throw new IllegalArgumentException("retryCount must > 0");
+        }
+        mRetryCount = retryCount;
+        return this;
+    }
+
+    /**
+     * 超时重试次数
+     *
+     * @return
+     */
+    public static int getRetryCount() {
+        return getInstance().mRetryCount;
+    }
+
+    /**
+     * 超时重试延迟时间
+     */
+    public CrazyNet setRetryDelay(int retryDelay) {
+        if (retryDelay < 0) {
+            throw new IllegalArgumentException("retryDelay must > 0");
+        }
+        mRetryDelay = retryDelay;
+        return this;
+    }
+
+    /**
+     * 超时重试延迟时间
+     */
+    public static int getRetryDelay() {
+        return getInstance().mRetryDelay;
+    }
+
+    /**
+     * 超时重试延迟叠加时间
+     */
+    public CrazyNet setRetryIncreaseDelay(int retryIncreaseDelay) {
+        if (retryIncreaseDelay < 0) {
+            throw new IllegalArgumentException("retryIncreaseDelay must > 0");
+        }
+        mRetryIncreaseDelay = retryIncreaseDelay;
+        return this;
+    }
+
+    /**
+     * 超时重试延迟叠加时间
+     */
+    public static int getRetryIncreaseDelay() {
+        return getInstance().mRetryIncreaseDelay;
+    }
+
+    /**
+     * 全局的缓存模式
+     *
+     * @param cacheMode
+     * @return
+     */
+    public CrazyNet setCacheMode(CacheMode cacheMode) {
+        mCacheConfig.setCacheMode(cacheMode);
+        return this;
+    }
+
+    /**
+     * 获取全局的缓存模式
+     *
+     * @return
+     */
+    public static CacheMode getCacheMode() {
+        if (getInstance().mCacheConfig == null) {
+            return null;
+        }
+        return getInstance().mCacheConfig.getCacheMode();
+    }
+
+
+    /**
+     * 全局的缓存过期时间
+     */
+    public CrazyNet setCacheTime(long cacheTime) {
+        if (cacheTime <= -1) {
+            cacheTime = DEFAULT_CACHE_NEVER_EXPIRE;
+        }
+        mCacheConfig.setCacheTime(cacheTime);
+        return this;
+    }
+
+    /**
+     * 获取全局的缓存过期时间
+     */
+    public static long getCacheTime() {
+        return getInstance().mCacheConfig.getCacheTime();
+    }
+
+    /**
+     * 全局的缓存大小,默认50M
+     */
+    public CrazyNet setCacheMaxSize(long maxSize) {
+        mCacheConfig.setCacheMaxSize(maxSize);
+        return this;
+    }
+
+    /**
+     * 获取全局的缓存大小
+     */
+    public static long getCacheMaxSize() {
+        return getInstance().mCacheConfig.getCacheMaxSize();
+    }
+
+
+    /**
+     * 全局设置缓存的版本，默认为1，缓存的版本号
+     */
+    public CrazyNet setCacheVersion(int cacheersion) {
+        if (cacheersion < 0) {
+            throw new IllegalArgumentException("cacheersion must > 0");
+        }
+        mRxCacheBuilder.appVersion(cacheersion);
+        return this;
+    }
+
+    /**
+     * 全局设置缓存的路径，默认是应用包下面的缓存
+     */
+    public CrazyNet setCacheDirectory(File directory) {
+        mCacheDirectory = Utils.checkNotNull(directory, "directory == null");
+        mRxCacheBuilder.diskDir(directory);
+        return this;
+    }
+
+    /**
+     * 获取缓存的路劲
+     */
+    public static File getCacheDirectory() {
+        return getInstance().mCacheConfig.getCacheDirectory();
+    }
 
 }
