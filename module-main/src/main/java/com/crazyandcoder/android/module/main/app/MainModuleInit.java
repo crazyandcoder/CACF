@@ -1,4 +1,4 @@
-package com.crazyandcoder.android.module.main.application;
+package com.crazyandcoder.android.module.main.app;
 
 import com.crazyandcoder.android.lib.base.BaseApplication;
 import com.crazyandcoder.android.lib.common.application.ICrazyModuleInit;

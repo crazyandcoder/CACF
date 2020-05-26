@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <com.crazyandcoder.android.lib.common.widget.viewpager.CustomNoTouchViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottomTabView"
+        android:background="@color/main_white">
+
+    </com.crazyandcoder.android.lib.common.widget.viewpager.CustomNoTouchViewPager>
+
+
+    <com.crazyandcoder.android.lib.common.widget.bottomtab.PageBottomTabView
+        android:id="@+id/bottomTabView"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true">
+
+    </com.crazyandcoder.android.lib.common.widget.bottomtab.PageBottomTabView>
+</RelativeLayout>

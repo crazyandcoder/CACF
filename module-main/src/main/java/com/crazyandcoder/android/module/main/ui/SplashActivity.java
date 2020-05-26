@@ -23,8 +23,10 @@ public class SplashActivity extends AppCompatActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ARouter.getInstance().build(ARouterPathConstant.ROUTER_PTTH_TEST_ACTIVITY).navigation();
+                ARouter.getInstance().build(ARouterPathConstant.ActivityName.ACTIVITY_MAIN).navigation();
             }
         });
+
+
     }
 }

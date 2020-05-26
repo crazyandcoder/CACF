@@ -14,7 +14,10 @@
             <option value="$PROJECT_DIR$/lib-base" />
             <option value="$PROJECT_DIR$/lib-common" />
             <option value="$PROJECT_DIR$/lib-network" />
+            <option value="$PROJECT_DIR$/module-home" />
             <option value="$PROJECT_DIR$/module-main" />
+            <option value="$PROJECT_DIR$/module-user" />
+            <option value="$PROJECT_DIR$/module-web" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

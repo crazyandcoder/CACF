@@ -3,7 +3,8 @@
     package="com.crazyandcoder.android.module.main">
 
     <application>
-        <activity android:name=".test.TestMvpActivity"></activity>
+        <activity android:name=".ui.MainActivity"></activity>
+        <activity android:name=".test.TestMvpActivity" />
         <activity
             android:name=".ui.SplashActivity"
             android:screenOrientation="portrait"
