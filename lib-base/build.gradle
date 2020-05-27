@@ -43,8 +43,6 @@ android {
     }
 
 
-
-
 }
 
 dependencies {
@@ -58,4 +56,5 @@ dependencies {
     api rootProject.ext.androidx["android.material"]
     api rootProject.ext.androidx["androidx.navigation-fragment"]
     api rootProject.ext.androidx["androidx.navigation-ui:"]
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 }
