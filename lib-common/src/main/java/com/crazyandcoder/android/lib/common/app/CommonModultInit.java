@@ -5,6 +5,7 @@ import android.widget.Toast;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.crazyandcoder.android.lib.base.BaseApplication;
 import com.crazyandcoder.android.lib.common.application.ICrazyModuleInit;
+import com.crazyandcoder.android.lib.common.utils.log.CrazyLog;
 import com.crazyandcoder.android.lib.network.CrazyNet;
 
 /**
@@ -33,6 +34,8 @@ public class CommonModultInit implements ICrazyModuleInit {
         //初始化网络框架
         CrazyNet.init(application);
         CrazyNet.getInstance().debug("CrazyAndPackHttpLog", true);
+
+        CrazyLog.init(true,"CrazyAndPack");
 
         return true;
     }

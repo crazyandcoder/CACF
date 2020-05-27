@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.crazyandcoder.android.lib.common.data.ARouterPathConstant;
+import com.crazyandcoder.android.lib.common.utils.log.CrazyLog;
 
 
 /**
@@ -19,7 +20,8 @@ import com.crazyandcoder.android.lib.common.data.ARouterPathConstant;
 public class WebFragment extends Fragment {
 
     public WebFragment() {
-        // Required empty public constructor
+        CrazyLog.d("据香港“东网”报道，当地时间5月26日，港澳知名爱国企业家、第9届至第11届全国政协常委何鸿燊逝世，享年98岁。\n");
+
     }
 
 
