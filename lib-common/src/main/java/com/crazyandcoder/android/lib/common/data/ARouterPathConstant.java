@@ -18,19 +18,47 @@ public class ARouterPathConstant {
     public static final String ROUTER_PTTH_TEST_ACTIVITY = "/test/test";
 
 
-
-
-
-
-
-    public static class ActivityName {
-        public static final String ACTIVITY_MAIN = "/main/main";
-        public static final String ACTIVITY_HOME_TEST = "/home/test";
+    /**
+     * 首页组件
+     */
+    public static class Home {
+        public static final String HOME = "/home";
+        public static final String PAGE_HOME = HOME + "/Home";
+        public static final String PAGE_HOME_TEST = HOME + "/Test";
     }
 
-    public static class FragmentName {
-        public static final String FRAGMENT_HOME = "/home/home";
-        public static final String FRAGMENT_WEB = "/web/web";
-        public static final String FRAGMENT_USER = "/user/user";
+
+
+    /**
+     * 首页组件
+     */
+    public static class Main {
+        public static final String MAIN = "/main";
+        public static final String PAGE_MAIN = MAIN + "/Main";
     }
+
+
+
+    /**
+     * 首页组件
+     */
+    public static class User {
+        public static final String USER = "/user";
+        public static final String PAGE_USER = USER + "/User";
+    }
+
+
+
+    /**
+     * 首页组件
+     */
+    public static class Web {
+        public static final String WEB = "/web";
+        public static final String PAGE_WEB = WEB + "/Web";
+    }
+
+
+
+
+
 }

@@ -21,5 +21,6 @@ public class AppApplication extends BaseApplication {
         super.onCreate();
         setsDebug(BuildConfig.DEBUG);
         ModuleLifecycleConfig.getInstance().initModuleAhead(this);
+        CrashHandler.getsInstance().init(getApplicationContext());
     }
 }

@@ -19,7 +19,7 @@ import com.crazyandcoder.android.module.main.adapter.MainPageFragmentAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-@Route(path = ARouterPathConstant.ActivityName.ACTIVITY_MAIN)
+@Route(path = ARouterPathConstant.Main.PAGE_MAIN)
 public class MainActivity extends AppCompatActivity {
 
     private CustomNoTouchViewPager mCustomNoTouchViewPager;
@@ -63,9 +63,9 @@ public class MainActivity extends AppCompatActivity {
     private void initFragment() {
         fragments = new ArrayList<>();
         //通过ARouter 获取其他组件提供的fragment
-        Fragment homeFragment = (Fragment) ARouter.getInstance().build(ARouterPathConstant.FragmentName.FRAGMENT_HOME).navigation();
-        Fragment webFragment = (Fragment) ARouter.getInstance().build(ARouterPathConstant.FragmentName.FRAGMENT_WEB).navigation();
-        Fragment userFragment = (Fragment) ARouter.getInstance().build(ARouterPathConstant.FragmentName.FRAGMENT_USER).navigation();
+        Fragment homeFragment = (Fragment) ARouter.getInstance().build(ARouterPathConstant.Home.PAGE_HOME).navigation();
+        Fragment webFragment = (Fragment) ARouter.getInstance().build(ARouterPathConstant.Web.PAGE_WEB).navigation();
+        Fragment userFragment = (Fragment) ARouter.getInstance().build(ARouterPathConstant.User.PAGE_USER).navigation();
         fragments.add(homeFragment);
         fragments.add(webFragment);
         fragments.add(userFragment);

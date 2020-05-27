@@ -7,7 +7,7 @@ import android.os.Bundle;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.crazyandcoder.android.lib.common.data.ARouterPathConstant;
 
-@Route(path = ARouterPathConstant.ActivityName.ACTIVITY_HOME_TEST)
+@Route(path = ARouterPathConstant.Home.PAGE_HOME_TEST)
 public class HomeTestActivity extends AppCompatActivity {
 
     @Override

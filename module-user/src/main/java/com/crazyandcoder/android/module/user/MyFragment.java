@@ -15,7 +15,7 @@ import com.crazyandcoder.android.lib.common.data.ARouterPathConstant;
 /**
  * A simple {@link Fragment} subclass.
  */
-@Route(path = ARouterPathConstant.FragmentName.FRAGMENT_USER)
+@Route(path = ARouterPathConstant.User.PAGE_USER)
 public class MyFragment extends Fragment {
 
     public MyFragment() {

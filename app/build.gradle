@@ -42,7 +42,7 @@ android {
         }
     }
 
-    dataBinding{
+    dataBinding {
         enabled true
     }
 
@@ -56,6 +56,8 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     testImplementation rootProject.ext.androidx["junit"]
     androidTestImplementation rootProject.ext.androidx["androidx.test.ext-junit"]
     androidTestImplementation rootProject.ext.androidx["androidx.test.espresso:espresso-core"]
@@ -65,5 +67,8 @@ dependencies {
         implementation project(':lib-base')
     } else {
         implementation project(path: ':module-main')
+        implementation project(path: ':module-home')
+        implementation project(path: ':module-user')
+        implementation project(path: ':module-web')
     }
 }
