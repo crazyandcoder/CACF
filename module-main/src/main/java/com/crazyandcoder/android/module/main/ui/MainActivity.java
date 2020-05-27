@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
 
         mCustomNoTouchViewPager.setAdapter(mPageFragmentAdapter);
         mNavigationController.setupWithViewPager(mCustomNoTouchViewPager);
-
     }
 
     private AbsBaseTabItem createTabItem(int drawable, int selectedDrawable, String title) {

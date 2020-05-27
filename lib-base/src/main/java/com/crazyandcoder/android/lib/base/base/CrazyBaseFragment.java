@@ -46,6 +46,12 @@ public abstract class CrazyBaseFragment extends CrazyBaseMvpFragment {
         }
     }
 
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+    }
+
     /**
      * 当前fragment被显示掉时调用该方法
      */

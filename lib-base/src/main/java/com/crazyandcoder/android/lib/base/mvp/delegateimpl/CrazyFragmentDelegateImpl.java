@@ -47,18 +47,18 @@ public class CrazyFragmentDelegateImpl<V extends ICrazyView, P extends ICrazyPre
 
     private P createLocalPresenter() {
         P presenter = this.mICrazyMvpDelegateCallback.createCrazyPresenter();
-        if (presenter == null) {
-            throw new NullPointerException(
-                    "Presenter returned from createPresenter() is null. Activity is " + getActivity());
-        }
+//        if (presenter == null) {
+//            throw new NullPointerException(
+//                    "Presenter returned from createPresenter() is null. Activity is " + getActivity());
+//        }
         return presenter;
     }
 
     private P getPresenter() {
         P presenter = this.mICrazyMvpDelegateCallback.getCrazyPresenter();
-        if (presenter == null) {
-            throw new NullPointerException("Presenter returned from getCrazyPresenter() is null");
-        }
+//        if (presenter == null) {
+//            throw new NullPointerException("Presenter returned from getCrazyPresenter() is null");
+//        }
         return presenter;
     }
 
@@ -76,9 +76,9 @@ public class CrazyFragmentDelegateImpl<V extends ICrazyView, P extends ICrazyPre
 
     private V getCrazyView() {
         V view = mICrazyMvpDelegateCallback.getCrazyView();
-        if (view == null) {
-            throw new NullPointerException("View returned from getCrazyView() is null");
-        }
+//        if (view == null) {
+//            throw new NullPointerException("View returned from getCrazyView() is null");
+//        }
         return view;
     }
 
@@ -87,9 +87,9 @@ public class CrazyFragmentDelegateImpl<V extends ICrazyView, P extends ICrazyPre
     public void onCreate(Bundle saved) {
 
         P presenter = createLocalPresenter();
-        if (presenter == null) {
-            throw new IllegalStateException("Presenter is null,internal exception,please restart and retry again or contact author:QQ:275137657!!!");
-        }
+//        if (presenter == null) {
+//            throw new IllegalStateException("Presenter is null,internal exception,please restart and retry again or contact author:QQ:275137657!!!");
+//        }
         this.mICrazyMvpDelegateCallback.setCrazyPresenter(presenter);
     }
 
@@ -101,13 +101,17 @@ public class CrazyFragmentDelegateImpl<V extends ICrazyView, P extends ICrazyPre
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         P presenter = getPresenter();
-        presenter.attachView(getCrazyView());
+        if (presenter != null) {
+            presenter.attachView(getCrazyView());
+        }
     }
 
     @Override
     public void onDestroyView() {
         P presenter = getPresenter();
-        presenter.detachView();
+        if (presenter != null) {
+            presenter.detachView();
+        }
     }
 
     @Override
