@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CommonCrazyRecyclerView">
+        <attr name="common_dividerColor" format="color" />
+        <attr name="common_dividerRecHeight" format="dimension" />
+        <attr name="common_dividerLeftMargin" format="dimension" />
+        <attr name="common_dividerRightMargin" format="dimension" />
+    </declare-styleable>
+
+
+    <declare-styleable name="CommonMultipleStatusView">
+        <attr name="commonLoadingView" format="reference" />
+        <attr name="commonErrorView" format="reference" />
+        <attr name="commonEmptyView" format="reference" />
+        <attr name="commonNoNetworkView" format="reference" />
+        <attr name="commonContentView" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="common_base_toolbar">
+        <attr name="common_toolbar_title" format="string" />
+        <attr name="common_toolbar_style" format="integer" />
+
+    </declare-styleable>
+
+    <declare-styleable name="common_CardView">
+        <attr name="common_bg_alpha" format="float" />
+        <attr name="common_bg_corners" format="integer" />
+    </declare-styleable>
+</resources>

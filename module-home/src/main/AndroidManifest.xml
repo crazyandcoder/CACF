@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.crazyandcoder.android.module.home">
 
-    <application></application>
+    <application>
+    </application>
 
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
 </manifest>

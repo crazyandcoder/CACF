@@ -8,11 +8,11 @@ import android.os.Bundle;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.crazyandcoder.android.lib.common.data.ARouterPathConstant;
-import com.crazyandcoder.android.lib.common.widget.bottomtab.PageBottomTabView;
+import com.crazyandcoder.android.lib.common.widget.bottomtab.CrazyPageBottomTabView;
 import com.crazyandcoder.android.lib.common.widget.bottomtab.controller.NavigationController;
 import com.crazyandcoder.android.lib.common.widget.bottomtab.item.AbsBaseTabItem;
 import com.crazyandcoder.android.lib.common.widget.bottomtab.item.NormalItemView;
-import com.crazyandcoder.android.lib.common.widget.viewpager.CustomNoTouchViewPager;
+import com.crazyandcoder.android.lib.common.widget.viewpager.CrazyCustomNoTouchViewPager;
 import com.crazyandcoder.android.module.main.R;
 import com.crazyandcoder.android.module.main.adapter.MainPageFragmentAdapter;
 
@@ -22,8 +22,8 @@ import java.util.List;
 @Route(path = ARouterPathConstant.Main.PAGE_MAIN)
 public class MainActivity extends AppCompatActivity {
 
-    private CustomNoTouchViewPager mCustomNoTouchViewPager;
-    private PageBottomTabView mPageBottomTabView;
+    private CrazyCustomNoTouchViewPager mCrazyCustomNoTouchViewPager;
+    private CrazyPageBottomTabView mCrazyPageBottomTabView;
     private MainPageFragmentAdapter mPageFragmentAdapter;
     private List<Fragment> fragments;
 
@@ -31,8 +31,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity_main);
-        mCustomNoTouchViewPager = (CustomNoTouchViewPager) findViewById(R.id.viewpager);
-        mPageBottomTabView = (PageBottomTabView) findViewById(R.id.bottomTabView);
+        mCrazyCustomNoTouchViewPager = (CrazyCustomNoTouchViewPager) findViewById(R.id.viewpager);
+        mCrazyPageBottomTabView = (CrazyPageBottomTabView) findViewById(R.id.bottomTabView);
 
         initFragment();
 
@@ -40,14 +40,14 @@ public class MainActivity extends AppCompatActivity {
         mPageFragmentAdapter.setData(fragments);
 
 
-        NavigationController mNavigationController = mPageBottomTabView.custom()
+        NavigationController mNavigationController = mCrazyPageBottomTabView.custom()
                 .addItem(createTabItem(R.drawable.main_ic_restore_gray_24dp, R.drawable.main_ic_restore_teal_24dp, "首页"))
                 .addItem(createTabItem(R.drawable.main_ic_nearby_gray_24dp, R.drawable.main_ic_nearby_teal_24dp, "附近"))
                 .addItem(createTabItem(R.drawable.main_ic_favorite_gray_24dp, R.drawable.main_ic_favorite_teal_24dp, "收藏"))
                 .build();
 
-        mCustomNoTouchViewPager.setAdapter(mPageFragmentAdapter);
-        mNavigationController.setupWithViewPager(mCustomNoTouchViewPager);
+        mCrazyCustomNoTouchViewPager.setAdapter(mPageFragmentAdapter);
+        mNavigationController.setupWithViewPager(mCrazyCustomNoTouchViewPager);
     }
 
     private AbsBaseTabItem createTabItem(int drawable, int selectedDrawable, String title) {

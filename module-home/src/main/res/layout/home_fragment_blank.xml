@@ -5,10 +5,12 @@
     android:layout_height="match_parent"
     tools:context=".HomeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <com.crazyandcoder.android.lib.common.widget.recyclerview.CrazyRecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/home_hello_blank_fragment" />
+        android:layout_height="match_parent">
+
+    </com.crazyandcoder.android.lib.common.widget.recyclerview.CrazyRecyclerView>
+
 
 </FrameLayout>

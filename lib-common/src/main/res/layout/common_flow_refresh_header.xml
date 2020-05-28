@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/head_contentLayout"
+    android:layout_width="match_parent"
+    android:layout_height="55dp"
+    android:background="#FFF7F7F7"
+    android:gravity="center"
+    android:animateLayoutChanges="true"
+    android:orientation="vertical">
+
+    <com.crazyandcoder.android.lib.common.widget.recyclerview.AutoPlayView
+        android:id="@+id/playView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
+    <ImageView
+        android:id="@+id/iv_head_people_anim"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/common_refresh_head_poople_anim" />
+
+
+    <TextView
+        android:id="@+id/tv_refresh_tip"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_gravity="bottom"
+        android:background="#FFF7F7F7"
+        android:gravity="center"
+        android:text="已为您更新了数据"
+        android:textColor="#ffffff"
+        android:textSize="13sp"
+        android:visibility="gone" />
+</FrameLayout>

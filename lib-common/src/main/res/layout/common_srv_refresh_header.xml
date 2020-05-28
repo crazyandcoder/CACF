@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/head_contentLayout"
+    android:layout_width="match_parent"
+    android:layout_height="55dp"
+    android:background="#FFF7F7F7"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <com.crazyandcoder.android.lib.common.widget.recyclerview.AutoPlayView
+        android:id="@+id/playView"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/iv_head_people_anim"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/common_refresh_head_poople_anim" />
+</FrameLayout>

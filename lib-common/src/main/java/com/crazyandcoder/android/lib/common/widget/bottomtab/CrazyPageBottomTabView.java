@@ -49,7 +49,7 @@ import java.util.List;
  * @UpdateRemark: 更新说明
  * @Version: 1.0
  */
-public class PageBottomTabView extends ViewGroup {
+public class CrazyPageBottomTabView extends ViewGroup {
 
     private int mTabPaddingTop;
     private int mTabPaddingBottom;
@@ -74,15 +74,15 @@ public class PageBottomTabView extends ViewGroup {
         }
     };
 
-    public PageBottomTabView(Context context) {
+    public CrazyPageBottomTabView(Context context) {
         super(context);
     }
 
-    public PageBottomTabView(Context context, AttributeSet attrs) {
+    public CrazyPageBottomTabView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public PageBottomTabView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CrazyPageBottomTabView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initView(context, attrs, defStyleAttr);
 
@@ -149,7 +149,7 @@ public class PageBottomTabView extends ViewGroup {
 
     @Override
     public CharSequence getAccessibilityClassName() {
-        return PageBottomTabView.class.getName();
+        return CrazyPageBottomTabView.class.getName();
     }
 
     /**
@@ -227,8 +227,8 @@ public class PageBottomTabView extends ViewGroup {
                 materialItemVerticalLayout.initialize(items, animateLayoutChanges, doTintIcon, defaultColor);
                 materialItemVerticalLayout.setPadding(0, mTabPaddingTop, 0, mTabPaddingBottom);
 
-                PageBottomTabView.this.removeAllViews();
-                PageBottomTabView.this.addView(materialItemVerticalLayout);
+                CrazyPageBottomTabView.this.removeAllViews();
+                CrazyPageBottomTabView.this.addView(materialItemVerticalLayout);
 
                 itemController = materialItemVerticalLayout;
 
@@ -264,8 +264,8 @@ public class PageBottomTabView extends ViewGroup {
                 materialItemLayout.initialize(items, checkedColors, mode, animateLayoutChanges, doTintIcon, defaultColor);
                 materialItemLayout.setPadding(0, mTabPaddingTop, 0, mTabPaddingBottom);
 
-                PageBottomTabView.this.removeAllViews();
-                PageBottomTabView.this.addView(materialItemLayout);
+                CrazyPageBottomTabView.this.removeAllViews();
+                CrazyPageBottomTabView.this.addView(materialItemLayout);
 
                 itemController = materialItemLayout;
             }
@@ -531,16 +531,16 @@ public class PageBottomTabView extends ViewGroup {
                 verticalItemLayout.initialize(items, animateLayoutChanges);
                 verticalItemLayout.setPadding(0, mTabPaddingTop, 0, mTabPaddingBottom);
 
-                PageBottomTabView.this.removeAllViews();
-                PageBottomTabView.this.addView(verticalItemLayout);
+                CrazyPageBottomTabView.this.removeAllViews();
+                CrazyPageBottomTabView.this.addView(verticalItemLayout);
                 itemController = verticalItemLayout;
             } else {//水平布局
                 CustomItemLayout customItemLayout = new CustomItemLayout(getContext());
                 customItemLayout.initialize(items, animateLayoutChanges);
                 customItemLayout.setPadding(0, mTabPaddingTop, 0, mTabPaddingBottom);
 
-                PageBottomTabView.this.removeAllViews();
-                PageBottomTabView.this.addView(customItemLayout);
+                CrazyPageBottomTabView.this.removeAllViews();
+                CrazyPageBottomTabView.this.addView(customItemLayout);
                 itemController = customItemLayout;
             }
 
@@ -635,10 +635,10 @@ public class PageBottomTabView extends ViewGroup {
             if (animator == null) {
                 if (mEnableVerticalLayout) {// 垂直布局向左隐藏
                     animator = ObjectAnimator.ofFloat(
-                            PageBottomTabView.this, "translationX", 0, -PageBottomTabView.this.getWidth());
+                            CrazyPageBottomTabView.this, "translationX", 0, -CrazyPageBottomTabView.this.getWidth());
                 } else {// 水平布局向下隐藏
                     animator = ObjectAnimator.ofFloat(
-                            PageBottomTabView.this, "translationY", 0, PageBottomTabView.this.getHeight());
+                            CrazyPageBottomTabView.this, "translationY", 0, CrazyPageBottomTabView.this.getHeight());
                 }
                 animator.setDuration(300);
                 animator.setInterpolator(new AccelerateDecelerateInterpolator());

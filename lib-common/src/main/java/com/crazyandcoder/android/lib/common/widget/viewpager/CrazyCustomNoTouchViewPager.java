@@ -19,13 +19,13 @@ import androidx.viewpager.widget.ViewPager;
  * @UpdateRemark: 更新说明
  * @Version: 1.0
  */
-public class CustomNoTouchViewPager extends ViewPager {
+public class CrazyCustomNoTouchViewPager extends ViewPager {
 
-    public CustomNoTouchViewPager(@NonNull Context context) {
+    public CrazyCustomNoTouchViewPager(@NonNull Context context) {
         super(context);
     }
 
-    public CustomNoTouchViewPager(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public CrazyCustomNoTouchViewPager(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 

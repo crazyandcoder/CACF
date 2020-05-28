@@ -1,55 +1,114 @@
 package com.crazyandcoder.android.module.home;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.crazyandcoder.android.lib.base.base.CrazyBaseFragment;
-import com.crazyandcoder.android.lib.base.mvp.common.ICrazyPresenter;
 import com.crazyandcoder.android.lib.common.data.ARouterPathConstant;
+import com.crazyandcoder.android.lib.common.utils.collections.CrazyList;
 import com.crazyandcoder.android.lib.common.utils.log.CrazyLog;
+import com.crazyandcoder.android.lib.common.utils.thread.CrazyCountDownTimer;
+import com.crazyandcoder.android.lib.common.widget.recyclerview.CrazyRecyclerView;
+import com.crazyandcoder.android.module.test.ActivityHome;
+import com.crazyandcoder.android.module.test.ActivityHomeItem;
+import com.crazyandcoder.android.module.test.HomeDataUtils;
+
+import java.util.List;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
 @Route(path = ARouterPathConstant.Home.PAGE_HOME)
-public class HomeFragment extends CrazyBaseFragment {
+public class HomeFragment extends Fragment {
+
+    private CrazyRecyclerView mCrazyRecyclerView;
+    private HomeAdapter homeAdapter;
+    private HomeDataRecyclerViewAdapter homeDataRecyclerViewAdapter;
+    private HomeDataAdapter homeDataAdapter;
+    private int times = 0;
 
     public HomeFragment() {
-        CrazyLog.d("据香港“东网”报道，当地时间5月26日，港澳知名爱国企业家、第9届至第11届全国政协常委何鸿燊逝世，享年98岁。\n");
     }
 
-
+    @Nullable
     @Override
-    protected int getLayoutID() {
-        return R.layout.home_fragment_blank;
-    }
-
-    @Override
-    protected void initViews(View v) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.home_fragment_blank, container, false);
+        return view;
 
     }
 
     @Override
-    protected void onFragemntHide() {
-        super.onFragemntHide();
-        CrazyLog.d("HomeFragment ---> onFragemntHide");
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        homeAdapter = new HomeAdapter(HomeDataUtils.createHomeItemData(), getContext());
+        mCrazyRecyclerView = (CrazyRecyclerView) view.findViewById(R.id.recyclerView);
+        mCrazyRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mCrazyRecyclerView.setAdapter(homeAdapter);
+
+        refresh5Shop();
+
     }
 
-    @Override
-    protected void onFragmentShow() {
-        super.onFragmentShow();
-        CrazyLog.d("HomeFragment ---> onFragmentShow");
+    private void refresh5Shop() {
+        //如果接口返回数据为空，则需要隐藏掉此5元入口
+        CrazyLog.d("请求接口数据：");
+        times = 0;
+        List<ActivityHome> data = HomeDataUtils.createActivityHomeData();
+        List<List<ActivityHome>> items = CrazyList.splitList(data, 3);
+        CrazyCountDownTimer.getInstance().start(true, 3, 0, new CrazyCountDownTimer.ICountDownCallback() {
+            @Override
+            public void onTick(int time) {
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (homeAdapter != null) {
+                                homeAdapter.updateTime(time);
+                            }
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onEndTick() {
+                CrazyLog.d("第 " + times + " 组");
+                times++;
+                if (items != null && !items.isEmpty() && times >= items.size()) {
+                    CrazyLog.d(items.size() + "轮分组已完成，重新请求接口：");
+                    refresh5Shop();
+                } else {
+                    List<ActivityHome> list = items.get(times);
+
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (homeAdapter != null) {
+                                    homeAdapter.update5Shop(list);
+                                }
+                            }
+                        });
+                    }
+
+                }
+            }
+        });
     }
 
+
     @Override
-    public ICrazyPresenter createCrazyPresenter() {
-        return null;
+    public void onDestroy() {
+        super.onDestroy();
+        CrazyCountDownTimer.getInstance().release();
     }
 }

@@ -2,10 +2,12 @@ package com.crazyandcoder.android.lib.base.base;
 
 import android.os.Bundle;
 
+import androidx.annotation.IdRes;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,12 @@ import com.crazyandcoder.android.lib.base.mvp.base.CrazyBaseMvpFragment;
  * A simple {@link Fragment} subclass.
  */
 public abstract class CrazyBaseFragment extends CrazyBaseMvpFragment {
+
+    /**
+     * {@link SparseArray}
+     * views对象集合,与相应的id对应存储
+     */
+    protected SparseArray<View> mViews = new SparseArray<View>();
 
     public CrazyBaseFragment() {
     }
@@ -46,6 +54,27 @@ public abstract class CrazyBaseFragment extends CrazyBaseMvpFragment {
         }
     }
 
+    /**
+     * 根据View的ID获取View对象
+     *
+     * @param viewId View的资源ID
+     * @param <V>    确定获取的View的类型
+     * @return 返回参数viewId所对应的View对象
+     */
+    @SuppressWarnings({"unchecked", "ConstantConditions"})
+    public <V extends View> V getViewByID(@IdRes int viewId) {
+        V view = (V) mViews.get(viewId);
+        if (view == null) {
+            try {
+                view = (V) getView().findViewById(viewId);
+            } catch (NullPointerException e) {
+                throw new NullPointerException("BaseFragment：#.getViewByID()方法请在initWidget()" +
+                        "方法中调用或避免在Fragment.onCreateView()方法中调用");
+            }
+            mViews.put(viewId, view);
+        }
+        return view;
+    }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {

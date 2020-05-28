@@ -1,7 +1,5 @@
 package com.crazyandcoder.android.lib.common.widget.bottomtab.builder;
 
-import com.crazyandcoder.android.lib.common.widget.bottomtab.PageBottomTabView;
-
 /**
  * @ClassName: AbsBuilder
  * @Description: java类作用描述

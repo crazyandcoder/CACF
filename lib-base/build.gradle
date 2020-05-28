@@ -56,5 +56,9 @@ dependencies {
     api rootProject.ext.androidx["android.material"]
     api rootProject.ext.androidx["androidx.navigation-fragment"]
     api rootProject.ext.androidx["androidx.navigation-ui:"]
+    api rootProject.ext.dependencies["rxjava2"]
+    api rootProject.ext.dependencies["rxandroid"]
+    api rootProject.ext.dependencies["glide"]
+    annotationProcessor rootProject.ext.dependencies["glide-compiler"]
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 }
